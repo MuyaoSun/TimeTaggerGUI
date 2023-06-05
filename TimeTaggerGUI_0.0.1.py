@@ -10,6 +10,11 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
+import numpy as np
+import matplotlib.pyplot as plt
+from time import sleep
+import TimeTagger
+import pandas as pd
 
 
 def unit_conversion(pre_num, pre_unit: str):
@@ -180,14 +185,16 @@ class Ui_MainWindow(object):
         self.clear_button.setGeometry(QtCore.QRect(410, 270, 291, 51))
         self.clear_button.setObjectName("clear_button")
 
+        # create a layout form
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
         self.layoutWidget.setGeometry(QtCore.QRect(22, 42, 158, 130))
         self.layoutWidget.setObjectName("layoutWidget")
-
+        # define layout as vertical
         self.verticalLayout = QtWidgets.QVBoxLayout(self.layoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
 
+        # create trail_num_label
         self.trail_num_label = QtWidgets.QLabel(self.layoutWidget)
         font = QtGui.QFont()
         font.setPointSize(11)
@@ -201,6 +208,7 @@ class Ui_MainWindow(object):
         self.trail_num_label.setObjectName("trail_num")
         self.verticalLayout.addWidget(self.trail_num_label)
 
+        # create trail_gap_label
         self.trail_gap_label = QtWidgets.QLabel(self.layoutWidget)
         font = QtGui.QFont()
         font.setPointSize(11)
@@ -214,6 +222,7 @@ class Ui_MainWindow(object):
         self.trail_gap_label.setObjectName("trail_gap_label")
         self.verticalLayout.addWidget(self.trail_gap_label)
 
+        # create total time label
         self.total_time_label = QtWidgets.QLabel(self.layoutWidget)
         font = QtGui.QFont()
         font.setPointSize(11)
@@ -227,6 +236,7 @@ class Ui_MainWindow(object):
         self.total_time_label.setObjectName("total_time")
         self.verticalLayout.addWidget(self.total_time_label)
 
+        # create number of bins label
         self.num_bin_label = QtWidgets.QLabel(self.layoutWidget)
         font = QtGui.QFont()
         font.setPointSize(11)
@@ -240,6 +250,7 @@ class Ui_MainWindow(object):
         self.num_bin_label.setObjectName("num_bin_label")
         self.verticalLayout.addWidget(self.num_bin_label)
 
+        # create bin width label
         self.bin_width_label = QtWidgets.QLabel(self.layoutWidget)
         self.bin_width_label.setEnabled(True)
         font = QtGui.QFont()
@@ -277,6 +288,7 @@ class Ui_MainWindow(object):
         self.count_rate_entry.setText("")
         self.count_rate_entry.setObjectName("count_rate_entry")
 
+        # generate a basic menubar
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 793, 26))
@@ -286,6 +298,7 @@ class Ui_MainWindow(object):
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
+        # implement label, button, and combo box content
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -295,7 +308,68 @@ class Ui_MainWindow(object):
         the function is called when start button is clicked, it starts the timetagger and generate a histogram
 
         """
-        pass
+        # create time tagger object
+        tagger = TimeTagger.createTimeTagger()
+
+        click = self.click_channel  # set click to user defined channel
+        start = self.start_channel  # set start to user defined channel
+
+        # Set trigger level of input channel to 1.1 V
+        tagger.setTriggerLevel(click, 1.1)
+        # Sets the dead_time of the input channel to 24000 ps
+        tagger.setDeadtime(1, 6000)
+
+        width = self.bin_width
+        bin_number = self.bin_num
+        int_time = 3e13                 # how do we want to define this integration time ? 3e13 is an example case
+        acquire_time = int_time / 1e12
+
+        trigger = tagger.getTriggerLevel(1)
+        serial = tagger.getSerial()
+        model = tagger.getModel()
+
+        # create message box promoting information about this experiment
+        exp_info_message = QMessageBox()
+        exp_info_message.setWindowTitle("Trail Information")
+        exp_info_message.setText(f"Model {model}.\n"
+                                 f"Serial number: {serial}.\n"
+                                 f"Channel {click} trigger level set to {trigger} Volts.\n"
+                                 f"Bin_width = {width} ps, {bin_number} bins\n"
+                                 f"Integration time set to {acquire_time} seconds.")
+        exp_info_message.exec_()
+
+        # create TimeTagger.Histogram for data collection
+        histogram = TimeTagger.Histogram(tagger,
+                                         click_channel=click,
+                                         start_channel=start,
+                                         binwidth=width,
+                                         n_bins=bin_number)
+        histogram.startFor(int(int_time))  # Sets the integration time (ps)
+        histogram.waitUntilFinished()
+
+        # record data
+        counts = np.array(histogram.getData())  # Counts, integer data type
+        time_data = np.array(histogram.getIndex())  # Time bins (ps), int data type
+        self.data = pd.DataFrame({"Time (ps)": time_data, "Counts": counts})
+
+        # plot the data
+        plt.plot(histogram.getIndex() / (1 * 10 ** 12),
+                 histogram.getData(),
+                 label="EFFA Scan 5 histogram")
+        plt.title("PLE Histogram")
+        plt.xlabel("Time [s]")
+        plt.ylabel("Counts")
+        plt.grid(True)
+        plt.legend(loc='upper right')
+        plt.show()
+
+        TimeTagger.freeTimeTagger(tagger)  # free the time tagger
+
+        # create a message box prompts user the end of data acquisition
+        finish_message = QMessageBox()
+        finish_message.setWindowTitle("Done!")
+        finish_message.setText("Acquisition completed\nConnection to Time Tagger closed.")
+        finish_message.exec_()
 
     def press_save(self):
         """
