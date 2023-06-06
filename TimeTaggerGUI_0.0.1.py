@@ -15,6 +15,7 @@ import matplotlib.pyplot as plt
 from time import sleep
 import TimeTagger
 import pandas as pd
+from pathlib import Path
 
 
 def unit_conversion(pre_num, pre_unit: str):
@@ -53,6 +54,9 @@ class Ui_MainWindow(object):
         self.start_channel = None
         self.click_channel = None
         self.data = None
+        self.counts = None
+        self.time_data = None
+
 
     def setupUi(self, MainWindow):
 
@@ -351,6 +355,8 @@ class Ui_MainWindow(object):
         counts = np.array(histogram.getData())  # Counts, integer data type
         time_data = np.array(histogram.getIndex())  # Time bins (ps), int data type
         self.data = pd.DataFrame({"Time (ps)": time_data, "Counts": counts})
+        self.counts = histogram.getData()
+        self.time_data = histogram.getIndex()
 
         # plot the data
         plt.plot(histogram.getIndex() / (1 * 10 ** 12),
@@ -378,7 +384,26 @@ class Ui_MainWindow(object):
         format of data dna file are not decided yet
         :return:
         """
-        pass
+        # get absolute path of save file directory  and save file name
+        f_name = QFileDialog.getSaveFileName(self, "Save File", "", "csv(*.csv)")
+        file_path = Path(f_name[0]+".csv")
+        file_path.parent.mkdir(parents=True, exist_ok=True)
+
+        # save data as csv file
+        self.data.to_csv(file_path)
+
+        # save figure based on collected data
+        file_path = Path(f_name[0])
+        file_path.parent.mkdir(parents=True, exist_ok=True)
+        plt.plot(self.time_data / (1 * 10 ** 12),
+                 self.counts,
+                 label="EFFA Scan 5 histogram")
+        plt.title("PLE Histogram")
+        plt.xlabel("Time [s]")
+        plt.ylabel("Counts")
+        plt.grid(True)
+        plt.legend(loc='upper right')
+        plt.savefig(file_path)
 
     def press_clear(self):
         """
