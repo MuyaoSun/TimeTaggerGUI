@@ -188,6 +188,12 @@ class Ui_MainWindow(object):
         self.clear_button = QtWidgets.QPushButton(self.centralwidget, clicked=lambda: self.press_clear())
         self.clear_button.setGeometry(QtCore.QRect(410, 270, 291, 51))
         self.clear_button.setObjectName("clear_button")
+        
+        # show the countrate
+        self.show_button = QtWidgets.QPushButton(self.centralwidget, clicked=lambda: self.press_show())
+        self.show_button.setGeometry(QtCore.QRect(630, 150, 93, 28))
+        self.show_button.setObjectName("show_button")
+
 
         # create a layout form
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
@@ -577,6 +583,10 @@ class Ui_MainWindow(object):
 
         # the print line below is for test
         print(error_message)
+    
+    def press_show(self):
+        count_rate = TimeTagger.Countrate(self.click_channel_entry.text())
+        self.count_rate_entry.setText(count_rate)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -608,6 +618,8 @@ class Ui_MainWindow(object):
         self.confirm_button.setText(_translate("MainWindow", "Confirm"))
         # set text for clear button
         self.clear_button.setText(_translate("MainWindow", "Clear"))
+        #
+        self.show_button.setText(_translate("MainWindow", "Show"))
 
         # The following lines define combo box element
         # set up gap time unit combo box element
