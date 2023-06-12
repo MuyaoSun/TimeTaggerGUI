@@ -50,7 +50,6 @@ class Ui_MainWindow(object):
         self.total_time = 0
         self.trail_num = 0
         self.bin_num = 0
-        self.gap_time = 0
         self.start_channel = 1
         self.click_channel = 2
         self.data = None
@@ -64,7 +63,7 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
 
         self.bin_num_entry = QtWidgets.QLineEdit(self.centralwidget)
-        self.bin_num_entry.setGeometry(QtCore.QRect(192, 126, 137, 22))
+        self.bin_num_entry.setGeometry(QtCore.QRect(193, 98, 137, 22))
         self.bin_num_entry.setObjectName("bin_num_entry")
         self.bin_num_entry.setText("0")
 
@@ -76,13 +75,13 @@ class Ui_MainWindow(object):
 
         # define total time entry box
         self.total_time_entry = QtWidgets.QLineEdit(self.centralwidget)
-        self.total_time_entry.setGeometry(QtCore.QRect(192, 97, 137, 22))
+        self.total_time_entry.setGeometry(QtCore.QRect(193, 69, 137, 22))
         self.total_time_entry.setObjectName("total_time_entry")
         self.total_time_entry.setText("0")
 
         # define bin width entry box
         self.bin_width_entry = QtWidgets.QLineEdit(self.centralwidget)
-        self.bin_width_entry.setGeometry(QtCore.QRect(192, 155, 137, 22))
+        self.bin_width_entry.setGeometry(QtCore.QRect(193, 127, 137, 22))
         self.bin_width_entry.setObjectName("bin_width_entry")
         self.bin_width_entry.setText("0")
 
@@ -100,26 +99,9 @@ class Ui_MainWindow(object):
         self.click_channel_label.setWordWrap(False)
         self.click_channel_label.setObjectName("click_channel_label")
 
-        #define and set gap_time_entry
-        self.gap_time_entry = QtWidgets.QLineEdit(self.centralwidget)
-        self.gap_time_entry.setGeometry(QtCore.QRect(192, 68, 137, 22))
-        self.gap_time_entry.setObjectName("gap_time_entry")
-        self.gap_time_entry.setText("0")
-
-        # define gap time unit combo box
-        self.gap_time_unit = QtWidgets.QComboBox(self.centralwidget)
-        self.gap_time_unit.setGeometry(QtCore.QRect(336, 68, 52, 22))
-        self.gap_time_unit.setObjectName("gap_time_unit")
-        self.gap_time_unit.addItem("")
-        self.gap_time_unit.addItem("")
-        self.gap_time_unit.addItem("")
-        self.gap_time_unit.addItem("")
-        self.gap_time_unit.addItem("")
-        self.gap_time_unit.addItem("")
-
         # define total time unit combo box
         self.total_time_unit = QtWidgets.QComboBox(self.centralwidget)
-        self.total_time_unit.setGeometry(QtCore.QRect(336, 97, 52, 22))
+        self.total_time_unit.setGeometry(QtCore.QRect(340, 70, 52, 22))
         self.total_time_unit.setObjectName("total_time_unit")
         self.total_time_unit.addItem("")
         self.total_time_unit.addItem("")
@@ -130,7 +112,7 @@ class Ui_MainWindow(object):
 
         # define bin width unit combo box
         self.bin_width_unit = QtWidgets.QComboBox(self.centralwidget)
-        self.bin_width_unit.setGeometry(QtCore.QRect(336, 155, 52, 22))
+        self.bin_width_unit.setGeometry(QtCore.QRect(340, 130, 52, 22))
         self.bin_width_unit.setObjectName("bin_width_unit")
         self.bin_width_unit.addItem("")
         self.bin_width_unit.addItem("")
@@ -167,7 +149,7 @@ class Ui_MainWindow(object):
 
         # define number of trail entry box
         self.num_trail_entry = QtWidgets.QLineEdit(self.centralwidget)
-        self.num_trail_entry.setGeometry(QtCore.QRect(192, 39, 137, 22))
+        self.num_trail_entry.setGeometry(QtCore.QRect(193, 40, 137, 22))
         self.num_trail_entry.setObjectName("num_trail_entry")
         self.num_trail_entry.setText("0")
 
@@ -186,17 +168,9 @@ class Ui_MainWindow(object):
         self.clear_button.setGeometry(QtCore.QRect(410, 270, 291, 51))
         self.clear_button.setObjectName("clear_button")
 
-        # create a layout form
-        self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(22, 42, 158, 130))
-        self.layoutWidget.setObjectName("layoutWidget")
-        # define layout as vertical
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.layoutWidget)
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout.setObjectName("verticalLayout")
-
         # create trail_num_label
-        self.trail_num_label = QtWidgets.QLabel(self.layoutWidget)
+        self.trail_num_label = QtWidgets.QLabel(self.centralwidget)
+        self.trail_num_label.setGeometry(QtCore.QRect(24, 44, 136, 20))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.trail_num_label.setFont(font)
@@ -206,25 +180,11 @@ class Ui_MainWindow(object):
         self.trail_num_label.setTextFormat(QtCore.Qt.AutoText)
         self.trail_num_label.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
         self.trail_num_label.setWordWrap(False)
-        self.trail_num_label.setObjectName("trail_num")
-        self.verticalLayout.addWidget(self.trail_num_label)
-
-        # create trail_gap_label
-        self.trail_gap_label = QtWidgets.QLabel(self.layoutWidget)
-        font = QtGui.QFont()
-        font.setPointSize(11)
-        self.trail_gap_label.setFont(font)
-        self.trail_gap_label.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.trail_gap_label.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.trail_gap_label.setLineWidth(3)
-        self.trail_gap_label.setTextFormat(QtCore.Qt.AutoText)
-        self.trail_gap_label.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
-        self.trail_gap_label.setWordWrap(False)
-        self.trail_gap_label.setObjectName("trail_gap_label")
-        self.verticalLayout.addWidget(self.trail_gap_label)
+        self.trail_num_label.setObjectName("trail_num_label")
 
         # create total time label
-        self.total_time_label = QtWidgets.QLabel(self.layoutWidget)
+        self.total_time_label = QtWidgets.QLabel(self.centralwidget)
+        self.total_time_label.setGeometry(QtCore.QRect(70, 70, 91, 20))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.total_time_label.setFont(font)
@@ -234,11 +194,11 @@ class Ui_MainWindow(object):
         self.total_time_label.setTextFormat(QtCore.Qt.AutoText)
         self.total_time_label.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
         self.total_time_label.setWordWrap(False)
-        self.total_time_label.setObjectName("total_time")
-        self.verticalLayout.addWidget(self.total_time_label)
+        self.total_time_label.setObjectName("total_time_label")
 
         # create number of bins label
-        self.num_bin_label = QtWidgets.QLabel(self.layoutWidget)
+        self.num_bin_label = QtWidgets.QLabel(self.centralwidget)
+        self.num_bin_label.setGeometry(QtCore.QRect(26, 100, 141, 20))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.num_bin_label.setFont(font)
@@ -249,11 +209,11 @@ class Ui_MainWindow(object):
         self.num_bin_label.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
         self.num_bin_label.setWordWrap(False)
         self.num_bin_label.setObjectName("num_bin_label")
-        self.verticalLayout.addWidget(self.num_bin_label)
 
         # create bin width label
-        self.bin_width_label = QtWidgets.QLabel(self.layoutWidget)
+        self.bin_width_label = QtWidgets.QLabel(self.centralwidget)
         self.bin_width_label.setEnabled(True)
+        self.bin_width_label.setGeometry(QtCore.QRect(80, 130, 81, 20))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.bin_width_label.setFont(font)
@@ -261,10 +221,9 @@ class Ui_MainWindow(object):
         self.bin_width_label.setFrameShadow(QtWidgets.QFrame.Raised)
         self.bin_width_label.setLineWidth(3)
         self.bin_width_label.setTextFormat(QtCore.Qt.AutoText)
-        self.bin_width_label.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.bin_width_label.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
         self.bin_width_label.setWordWrap(False)
         self.bin_width_label.setObjectName("bin_width_label")
-        self.verticalLayout.addWidget(self.bin_width_label)
 
         # define count_rate_label
         self.count_rate_label = QtWidgets.QLabel(self.centralwidget)
@@ -403,7 +362,6 @@ class Ui_MainWindow(object):
         self.click_channel_entry.setText("")
         self.start_channel_entry.setText("")
         self.bin_num_entry.setText("")
-        """self.gap_time_entry.setText("")"""
         self.total_time_entry.setText("")
 
         # reset variables to 0
@@ -411,7 +369,6 @@ class Ui_MainWindow(object):
         self.total_time = 0
         self.trail_num = 0
         self.bin_num = 0
-        self.gap_time = 0
         self.start_channel = 0
         self.click_channel = 0
 
@@ -453,21 +410,6 @@ class Ui_MainWindow(object):
         except ValueError:
             error_message += "Warning: Invalid Number of Trails, must be a Integer!\n"
             self.num_trail_entry.setText("ERROR")
-            validity = False
-
-        # check validity for gap time between trails
-        gap_time_input = self.gap_time_entry.text()
-        try:
-            gap_time_input = float(gap_time_input)
-            gap_unit = self.gap_time_unit.currentText()
-            self.gap_time = unit_conversion(gap_time_input, gap_unit)
-            if gap_time_input < 0:
-                validity = False
-                self.gap_time_entry.setText("ERROR")
-                error_message += "Warning: Invalid Gap Time Input, must be 0 or a positive number!\n"
-        except ValueError:
-            error_message += "Warning: Invalid Gap Time Input, must be a number!\n"
-            self.gap_time_entry.setText("ERROR")
             validity = False
 
         # check validity for number of Bins
@@ -541,7 +483,7 @@ class Ui_MainWindow(object):
         # check for time conflict and make change suggestion under valid input condition
         if validity:
             single_trail_time = self.bin_width * self.bin_num
-            expect_time = self.trail_num * single_trail_time + (self.trail_num-1) * self.gap_time
+            expect_time = self.trail_num * single_trail_time
             if expect_time != self.total_time:
                 validity = False
                 error_message = "Total Time Seems have conflict with other variables.\n" \
@@ -574,8 +516,6 @@ class Ui_MainWindow(object):
         self.count_rate_label.setText(_translate("MainWindow", "Count Rate:"))
         # set start channel label text
         self.start_channel_label.setText(_translate("MainWindow", "Start Channel:"))
-        # set gap_time_label text
-        self.trail_gap_label.setText(_translate("MainWindow", "Time Between Trail:"))
         # set total_time_label text
         self.total_time_label.setText(_translate("MainWindow", "Total Time:"))
         # set num_bin_label text
@@ -595,14 +535,7 @@ class Ui_MainWindow(object):
         # set text for clear button
         self.clear_button.setText(_translate("MainWindow", "Clear"))
 
-        # The following lines define combo box element
-        # set up gap time unit combo box element
-        self.gap_time_unit.setItemText(0, _translate("MainWindow", "min"))
-        self.gap_time_unit.setItemText(1, _translate("MainWindow", "sec"))
-        self.gap_time_unit.setItemText(2, _translate("MainWindow", "ms"))
-        self.gap_time_unit.setItemText(3, _translate("MainWindow", "μs"))
-        self.gap_time_unit.setItemText(4, _translate("MainWindow", "ns"))
-        self.gap_time_unit.setItemText(5, _translate("MainWindow", "ps"))
+        # The following lines define combo box element"
         # set up total_time unit combo box element
         self.total_time_unit.setItemText(0, _translate("MainWindow", "min"))
         self.total_time_unit.setItemText(1, _translate("MainWindow", "sec"))
