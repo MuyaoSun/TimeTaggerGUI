@@ -46,17 +46,14 @@ def unit_conversion(pre_num, pre_unit: str):
 class Ui_MainWindow(object):
     def __init__(self):
         # create class variables for instrument control
-        self.bin_width = None
-        self.total_time = None
-        self.trail_num = None
-        self.bin_num = None
+        self.bin_width = 0
+        self.total_time = 0
+        self.trail_num = 0
+        self.bin_num = 0
         self.gap_time = 0
-        self.start_channel = None
-        self.click_channel = None
+        self.start_channel = 1
+        self.click_channel = 2
         self.data = None
-        self.counts = None
-        self.time_data = None
-
 
     def setupUi(self, MainWindow):
 
@@ -160,13 +157,13 @@ class Ui_MainWindow(object):
         self.start_channel_entry = QtWidgets.QLineEdit(self.centralwidget)
         self.start_channel_entry.setGeometry(QtCore.QRect(550, 41, 137, 22))
         self.start_channel_entry.setObjectName("start_channel_entry")
-        self.start_channel_entry.setText("0")
+        self.start_channel_entry.setText("1")
 
         # define click channel entry box
         self.click_channel_entry = QtWidgets.QLineEdit(self.centralwidget)
         self.click_channel_entry.setGeometry(QtCore.QRect(550, 70, 137, 22))
         self.click_channel_entry.setObjectName("click_channel_entry")
-        self.click_channel_entry.setText("0")
+        self.click_channel_entry.setText("2")
 
         # define number of trail entry box
         self.num_trail_entry = QtWidgets.QLineEdit(self.centralwidget)
@@ -355,8 +352,6 @@ class Ui_MainWindow(object):
         counts = np.array(histogram.getData())  # Counts, integer data type
         time_data = np.array(histogram.getIndex())  # Time bins (ps), int data type
         self.data = pd.DataFrame({"Time (ps)": time_data, "Counts": counts})
-        self.counts = histogram.getData()
-        self.time_data = histogram.getIndex()
 
         # plot the data
         plt.plot(histogram.getIndex() / (1 * 10 ** 12),
@@ -384,26 +379,18 @@ class Ui_MainWindow(object):
         format of data dna file are not decided yet
         :return:
         """
+
         # get absolute path of save file directory  and save file name
-        f_name = QFileDialog.getSaveFileName(self, "Save File", "", "csv(*.csv)")
-        file_path = Path(f_name[0]+".csv")
+        f_name = QFileDialog.getSaveFileName(None, "Save File", "", "CSV Files (*.csv)")
+        # check for valid file name input
+        if not f_name[0]:
+            return
+        file_path = Path(f_name[0])
         file_path.parent.mkdir(parents=True, exist_ok=True)
 
         # save data as csv file
         self.data.to_csv(file_path)
 
-        # save figure based on collected data
-        file_path = Path(f_name[0])
-        file_path.parent.mkdir(parents=True, exist_ok=True)
-        plt.plot(self.time_data / (1 * 10 ** 12),
-                 self.counts,
-                 label="EFFA Scan 5 histogram")
-        plt.title("PLE Histogram")
-        plt.xlabel("Time [s]")
-        plt.ylabel("Counts")
-        plt.grid(True)
-        plt.legend(loc='upper right')
-        plt.savefig(file_path)
 
     def press_clear(self):
         """
@@ -550,7 +537,7 @@ class Ui_MainWindow(object):
             error_message += "Warning: Start Channel must be different from Click Channel!\n"
             validity = False
             self.click_channel_entry.setText("ERROR")
-            self.start_channel.setText("ERROR")
+            self.start_channel_entry.setText("ERROR")
 
         # check for time conflict and make change suggestion under valid input condition
         if validity:
