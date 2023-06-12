@@ -50,7 +50,7 @@ class Ui_MainWindow(object):
         self.total_time = 0
         self.trail_num = 0
         self.bin_num = 0
-        # self.gap_time = 0
+        self.gap_time = 0
         self.start_channel = 1
         self.click_channel = 2
         self.data = None
@@ -411,7 +411,7 @@ class Ui_MainWindow(object):
         self.total_time = 0
         self.trail_num = 0
         self.bin_num = 0
-        """self.gap_time = 0"""
+        self.gap_time = 0
         self.start_channel = 0
         self.click_channel = 0
 
