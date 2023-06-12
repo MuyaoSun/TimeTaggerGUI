@@ -322,7 +322,7 @@ class Ui_MainWindow(object):
 
         width = self.bin_width
         bin_number = self.bin_num
-        int_time = 3e13                 # how do we want to define this integration time ? 3e13 is an example case
+        int_time = self.total_time
         acquire_time = int_time / 1e12
 
         trigger = tagger.getTriggerLevel(1)
@@ -354,7 +354,7 @@ class Ui_MainWindow(object):
         self.data = pd.DataFrame({"Time (ps)": time_data, "Counts": counts})
 
         # plot the data
-        plt.plot(histogram.getIndex() / (1 * 10 ** 12),
+        plt.plot(histogram.getIndex() / 1e12,
                  histogram.getData(),
                  label="EFFA Scan 5 histogram")
         plt.title("PLE Histogram")
@@ -403,7 +403,7 @@ class Ui_MainWindow(object):
         self.click_channel_entry.setText("")
         self.start_channel_entry.setText("")
         self.bin_num_entry.setText("")
-        self.gap_time_entry.setText("")
+        """self.gap_time_entry.setText("")"""
         self.total_time_entry.setText("")
 
         # reset variables to 0
@@ -418,7 +418,6 @@ class Ui_MainWindow(object):
         # disable start button for next confirm test
         self.start_button.setEnabled(False)
 
-
     def press_confirm(self):
         """
         press_confirm check the user input and check for conflict item
@@ -431,7 +430,7 @@ class Ui_MainWindow(object):
         total_time_input = self.total_time_entry.text()
         try:
             total_time_input = float(total_time_input)
-            total_unit = self.gap_time_unit.currentText()
+            total_unit = self.total_time_unit.currentText()
             self.total_time = unit_conversion(total_time_input, total_unit)
             if total_time_input < 0:
                 validity = False
